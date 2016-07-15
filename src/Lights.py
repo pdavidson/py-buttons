@@ -4,7 +4,7 @@ __green = 15  # Pin LED Green
 __yellow = 16  # Pin LED Yellow
 __red = 17  # Pin LED Red
 
-light_pins = [__green, __yellow, __red]
+lights = [__green, __yellow, __red]
 
 def red():
     __off(__green)
