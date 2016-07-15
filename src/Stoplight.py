@@ -10,7 +10,7 @@ class Stoplight(object):
         return ''.join(self.inputs)
 
     def validate(self):
-        calculated = ''.join(self.inputs)
+        calculated = self.get()
         return calculated == self.code
 
     def reset(self):
