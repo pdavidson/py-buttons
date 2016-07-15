@@ -1,16 +1,9 @@
 from mock.mockGPIO import GPIO
 from Lights import red, green, yellow, lights
+from Buttons import buttons, is_reset, get_code
 
 
 class Bootstrapper:
-
-    buttonA = 1  # Pin 1
-    buttonB = 2  # Pin 2
-    buttonC = 3  # Pin 3
-
-    buttonReset = 4 # Pin 4
-
-    codes = {buttonA: "a", buttonB: "b", buttonC: "c"}
 
     def __init__(self, stoplight):
         self.stoplight = stoplight
@@ -18,7 +11,7 @@ class Bootstrapper:
     def bootstrap(self):
         print ("bootstrapping GPIO")
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup([Bootstrapper.buttonA, Bootstrapper.buttonB, Bootstrapper.buttonC], GPIO.IN)
+        GPIO.setup(buttons, GPIO.IN)
         GPIO.setup(lights, GPIO.OUT)
         self.__bootstrap_callbacks()
 
@@ -26,23 +19,19 @@ class Bootstrapper:
 
     def __bootstrap_callbacks(self):
         print ("bootstrapping callbacks")
-        GPIO.add_event_detect(Bootstrapper.buttonA, GPIO.FALLING, callback=self.click_callback, bouncetime=200)
-        GPIO.add_event_detect(Bootstrapper.buttonB, GPIO.FALLING, callback=self.click_callback, bouncetime=200)
-        GPIO.add_event_detect(Bootstrapper.buttonC, GPIO.FALLING, callback=self.click_callback, bouncetime=200)
+        GPIO.add_event_detect(buttons, GPIO.FALLING, callback=self.click_callback, bouncetime=200)
 
     def click_callback(self, channel):
         print("Channel " + channel + " clicked")
 
-        if channel == Bootstrapper.buttonReset:
+        if is_reset(channel):
             print ("Resetting")
             yellow()
             self.stoplight.reset()
         else:
-            value = Bootstrapper.codes[channel]
-
+            value = get_code(channel)
             print("Pushing value " + value)
             self.stoplight.push(value)
-
             valid = self.stoplight.validate()
 
             if valid:
