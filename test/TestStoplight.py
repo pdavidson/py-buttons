@@ -1,9 +1,10 @@
 import unittest
-import Stoplight
+import Stoplight as Stoplight
+
 
 class TestStoplight(unittest.TestCase):
 
-    def before(self):
+    def setUp(self):
         self.stoplight = Stoplight('aabbcc')
 
     def test_push(self):
