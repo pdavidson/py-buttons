@@ -6,6 +6,7 @@ __red = 17  # Pin LED Red
 
 lights = [__green, __yellow, __red]
 
+
 def red():
     __off(__green)
     __on(__red)
